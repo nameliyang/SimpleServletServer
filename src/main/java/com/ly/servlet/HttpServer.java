@@ -7,7 +7,6 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Date;
 // telnet 127.0.0.1 8080
 public class HttpServer {
 	/**
@@ -18,12 +17,14 @@ public class HttpServer {
 	 */
 	public static final String WEB_ROOT = System.getProperty("user.dir")
 			+ File.separator + "webroot";
+	
 	// shutdown command
 	private static final String SHUTDOWN_COMMAND = "/SHUTDOWN";
 	// the shutdown command received
 	private boolean shutdown = false;
 
 	public static void main(String[] args) throws IOException {
+		
 //		final ServerSocket serverSocket = new ServerSocket(8080,1);
 //		while(true){
 //			final Socket socket = serverSocket.accept();
@@ -77,7 +78,18 @@ public class HttpServer {
 				// create Response object
 				Response response = new Response(output);
 				response.setRequest(request);
-				response.sendStaticResource();
+				
+				if(request.getUri().startsWith("/servlet/")){
+					ServletProcessor processor = new ServletProcessor();
+					processor.process(request, response);
+				}else{
+					StaticResourceProcessor processor = 
+							new StaticResourceProcessor();
+					processor.process(request, response);
+				}
+				
+				
+				//response.sendStaticResource();
 
 				// Close the socket
 				socket.close();

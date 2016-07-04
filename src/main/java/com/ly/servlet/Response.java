@@ -4,6 +4,11 @@ import java.io.OutputStream;
 import java.io.IOException;
 import java.io.FileInputStream;
 import java.io.File;
+import java.io.PrintWriter;
+import java.util.Locale;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.ServletResponse;
 
 /*
  HTTP Response = Status-Line
@@ -13,12 +18,14 @@ import java.io.File;
  Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
  */
 
-public class Response {
+public class Response implements ServletResponse{
 
 	private static final int BUFFER_SIZE = 1024;
 	Request request;
 	OutputStream output;
-
+	PrintWriter writer;
+	
+	
 	public Response(OutputStream output) {
 		this.output = output;
 	}
@@ -48,11 +55,71 @@ public class Response {
 				output.write(errorMessage.getBytes());
 			}
 		} catch (Exception e) {
-			// thrown if cannot instantiate a File object
 			System.out.println(e.toString());
 		} finally {
 			if (fis != null)
 				fis.close();
 		}
+	}
+
+	public String getCharacterEncoding() {
+		return null;
+	}
+
+	public String getContentType() {
+		return null;
+	}
+
+	public ServletOutputStream getOutputStream() throws IOException {
+		return null;
+	}
+
+	public PrintWriter getWriter() throws IOException {
+		writer = new PrintWriter(output,true);
+		return writer;
+	}
+
+	public void setCharacterEncoding(String charset) {
+		
+	}
+
+	public void setContentLength(int len) {
+		
+	}
+
+	public void setContentType(String type) {
+		
+	}
+
+	public void setBufferSize(int size) {
+		
+	}
+
+	public int getBufferSize() {
+		return 0;
+	}
+
+	public void flushBuffer() throws IOException {
+		
+	}
+
+	public void resetBuffer() {
+		
+	}
+
+	public boolean isCommitted() {
+		return false;
+	}
+
+	public void reset() {
+		
+	}
+
+	public void setLocale(Locale loc) {
+		
+	}
+
+	public Locale getLocale() {
+		return null;
 	}
 }
